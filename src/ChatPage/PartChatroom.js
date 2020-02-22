@@ -30,7 +30,7 @@ const PartChatroom = () => {
       </div>
       <div style={{ padding: 10 }}>
         <Badge count={5}>
-          <Text style={{ padding: 15 }}>ARMY Vancouver</Text>
+          <Text style={{ padding: 15 }}>Overwatch Vancouver</Text>
         </Badge>
         <Tag color="green" style={{ marginLeft: 20 }}>
           Open
@@ -38,7 +38,15 @@ const PartChatroom = () => {
       </div>
       <div style={{ padding: 10 }}>
         <Badge count={5}>
-          <Text style={{ padding: 15 }}>ARMY Vancouver</Text>
+          <Text style={{ padding: 15 }}>Pubg Vancouver</Text>
+        </Badge>
+        <Tag color="magenta" style={{ marginLeft: 20 }}>
+          Private
+        </Tag>
+      </div>
+      <div style={{ padding: 10 }}>
+        <Badge count={5}>
+          <Text style={{ padding: 15 }}>Vancouver Titans club</Text>
         </Badge>
         <Tag color="magenta" style={{ marginLeft: 20 }}>
           Private
