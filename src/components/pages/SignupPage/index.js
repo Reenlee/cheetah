@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { message } from "antd";
 import { useHistory } from "react-router-dom";
+import { postRequest } from "../../helpers/api";
 
 const SignupPage = () => {
   const history = useHistory();
@@ -15,26 +15,14 @@ const SignupPage = () => {
     setPassword(e.target.value);
   };
 
-  const handleErrors = async response => {
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message);
-    }
-  };
+  const handleClick = () => {
+    const userInfo = { username, password };
 
-  const handleClick = async () => {
-    try {
-      const userInfo = { username, password };
-
-      await fetch("http://localhost:3000/signup", {
-        method: "POST",
-        body: JSON.stringify(userInfo)
-      }).then(handleErrors);
-
+    postRequest("/signup", userInfo).then(data => {
+      const token = data.token;
+      localStorage.setItem("token", token);
       history.push("/chat");
-    } catch (err) {
-      message.error(err.message);
-    }
+    });
   };
 
   return (
