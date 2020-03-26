@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { Button, Input } from "antd";
 import { postRequest } from "../../helpers/api";
 
 const SignupPage = () => {
@@ -15,7 +16,7 @@ const SignupPage = () => {
     setPassword(e.target.value);
   };
 
-  const handleClick = () => {
+  const handleClickSignup = () => {
     const userInfo = { username, password };
 
     postRequest("/signup", userInfo).then(data => {
@@ -25,16 +26,66 @@ const SignupPage = () => {
     });
   };
 
+  const handleClickLogin = () => {
+    history.push("/");
+  };
+
   return (
-    <div>
-      <div>Username</div>
-      <input type="text" onChange={handleChangeUN} value={username} />
+    <div style={{ display: "grid", minHeight: "100vh" }}>
+      <div style={{ margin: "auto", width: 250 }}>
+        <div style={{ display: "grid", height: 80 }}>
+          <div
+            style={{
+              margin: "auto",
+              fontSize: 40,
+              color: "white",
+              textShadow:
+                "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
+            }}
+          >
+            ABC
+          </div>
+        </div>
 
-      <div>Password</div>
-      <input type="password" onChange={handleChangePW} value={password} />
+        <div
+          style={{
+            border: "3px solid #940575",
+            padding: 20,
+            borderRadius: 5
+          }}
+        >
+          <div style={{ display: "grid" }}>
+            <div>Username</div>
+            <Input
+              placeholder="Username"
+              type="text"
+              onChange={handleChangeUN}
+              value={username}
+            />
+          </div>
 
-      <br />
-      <button onClick={handleClick}>Sign Up</button>
+          <div style={{ display: "grid", marginTop: 5 }}>
+            <div>Password</div>
+            <Input
+              placeholder="Password"
+              type="password"
+              onChange={handleChangePW}
+              value={password}
+            />
+          </div>
+
+          <div style={{ display: "grid", marginTop: 10 }}>
+            <Button type="primary" onClick={handleClickSignup}>
+              Signup
+            </Button>
+          </div>
+
+          <div style={{ display: "grid", marginTop: 20 }}>
+            <div>Already have an account?</div>
+            <Button onClick={handleClickLogin}>Login</Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

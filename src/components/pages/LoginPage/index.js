@@ -16,7 +16,7 @@ const LoginPage = () => {
     setPassword(e.target.value);
   };
 
-  const handleClick = () => {
+  const handleClickLogin = () => {
     const userInfo = { username, password };
 
     postRequest("/login", userInfo).then(data => {
@@ -75,7 +75,7 @@ const LoginPage = () => {
           </div>
 
           <div style={{ display: "grid", marginTop: 10 }}>
-            <Button type="primary" onClick={handleClick}>
+            <Button type="primary" onClick={handleClickLogin}>
               Login
             </Button>
           </div>

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Typography } from "antd";
-import { Button, Modal, Tag } from "antd";
+import { Button, Modal, Tag, Input } from "antd";
+
+import { postRequest } from "../../helpers/api";
 
 const { Text } = Typography;
 
@@ -16,6 +18,7 @@ const Container = styled.div`
 
 const AccountInfo = () => {
   const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState("");
 
   const handleClickCreateChat = () => {
     setOpen(true);
@@ -27,6 +30,16 @@ const AccountInfo = () => {
 
   const handleCancelCreateChat = () => {
     setOpen(false);
+  };
+
+  const handleChangeUsername = e => {
+    setUsername(e.target.value);
+  };
+
+  const handleClickAddFriend = () => {
+    postRequest("/friends/add", { username }).then(data => {
+      setOpen(false);
+    });
   };
 
   return (
@@ -44,22 +57,28 @@ const AccountInfo = () => {
         <Button
           onClick={handleClickCreateChat}
           type="primary"
-          icon="poweroff"
+          icon="plus"
           style={{ marginRight: 20 }}
         >
-          Create Chatroom
+          Add Friend
         </Button>
       </Container>
 
       <Modal
-        title="Basic Modal"
+        title="Add Friend"
         visible={open}
-        onOk={handleOkCreateChat}
         onCancel={handleCancelCreateChat}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleClickAddFriend}>
+            Add
+          </Button>
+        ]}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <Input
+          placeholder="Enter username"
+          value={username}
+          onChange={handleChangeUsername}
+        />
       </Modal>
     </>
   );

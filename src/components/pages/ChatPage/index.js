@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AccountInfo from "./AccountInfo";
 import PartChatroom from "./PartChatroom";
 import Chatroom from "./Chatroom";
+import FriendList from "./FriendList";
 
 const ChatContainer = styled.div`
   display: grid;
@@ -19,13 +20,7 @@ const Container = styled.div`
 
 const AccountInfoWrapper = styled(Container)`
   grid-row: 1/3;
-  grid-column: 1/2;
-  display: flex;
-`;
-
-const ChatroomInfoWrapper = styled(Container)`
-  grid-row: 1/3;
-  grid-column: 2/3;
+  grid-column: 1/3;
   display: flex;
 `;
 
@@ -56,13 +51,16 @@ const ChatPage = () => {
         <AccountInfo />
       </AccountInfoWrapper>
 
-      <ChatroomInfoWrapper></ChatroomInfoWrapper>
-
       <PartChatroomWrapper>
         <PartChatroom />
       </PartChatroomWrapper>
-      <OpenChatroom></OpenChatroom>
+
+      <OpenChatroom>
+        <FriendList />
+      </OpenChatroom>
+
       <Friends></Friends>
+
       <ChatroomWrapper>
         <Chatroom />
       </ChatroomWrapper>
