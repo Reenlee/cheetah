@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import { Typography } from "antd";
-import { Button, Modal, Tag, Input } from "antd";
+import { Typography, Button, Modal, Input, Select } from "antd";
 
-import { postRequest } from "../../helpers/api";
+import { useChat } from "../../contexts/chat";
+import { useAuth } from "../../contexts/auth";
 
 const { Text } = Typography;
+const { Option } = Select;
 
 const Container = styled.div`
   position: absolute;
@@ -13,32 +14,54 @@ const Container = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 20px;
+  padding: 10px;
 `;
 
 const AccountInfo = () => {
-  const [open, setOpen] = useState(false);
-  const [username, setUsername] = useState("");
+  const { auth } = useAuth();
+  const { addFriend, addRoom, recipients } = useChat();
+  const [openFriend, setOpenFriend] = useState(false);
+  const [openRoom, setOpenRoom] = useState(false);
+  // track usernames when user creates a new room
+  const [usernames, setUsernames] = useState([]);
 
-  const handleClickCreateChat = () => {
-    setOpen(true);
-  };
+  const roomRef = useRef(null);
+  const usernameRef = useRef(null);
 
-  const handleOkCreateChat = () => {
-    setOpen(false);
-  };
+  const openAddFriendModal = () => setOpenFriend(true);
 
-  const handleCancelCreateChat = () => {
-    setOpen(false);
-  };
+  const openCreateRoomModal = () => setOpenRoom(true);
 
-  const handleChangeUsername = e => {
-    setUsername(e.target.value);
+  const closeAddFriendModal = () => setOpenFriend(false);
+
+  const closeCreateRoomModal = () => setOpenRoom(false);
+
+  const handleChangeSelect = (_, data) => {
+    const result = data.filter(({ props }) => {
+      const friend = recipients.find((f) => f.id === props.userId);
+      return friend;
+    });
+    setUsernames(result.map((r) => r.key));
   };
 
   const handleClickAddFriend = () => {
-    postRequest("/friends/add", { username }).then(data => {
-      setOpen(false);
+    const username = usernameRef.current.state.value;
+    usernameRef.current.setValue("");
+    addFriend(username).then(() => {
+      setOpenFriend(false);
+    });
+  };
+
+  const handleClickCreateRoom = () => {
+    const name = roomRef.current.state.value;
+    const userIds = recipients
+      .filter((r) => usernames.includes(r.username))
+      .map((r) => r.id);
+
+    addRoom(name, userIds).then(() => {
+      setOpenRoom(false);
+      roomRef.current.setValue("");
+      setUsernames([]);
     });
   };
 
@@ -46,39 +69,72 @@ const AccountInfo = () => {
     <>
       <Container>
         <div>
-          <Text>Reen</Text>
+          <Text>{auth.username}</Text>
         </div>
         <div>
-          <Text>Friends: 20</Text>
-        </div>
-        <div>
-          <Text>Online Friends: 20</Text>
+          <Text>{`Friends: ${recipients.length}`}</Text>
         </div>
         <Button
-          onClick={handleClickCreateChat}
+          onClick={openAddFriendModal}
           type="primary"
           icon="plus"
           style={{ marginRight: 20 }}
         >
           Add Friend
         </Button>
+
+        <Button
+          onClick={openCreateRoomModal}
+          type="primary"
+          icon="plus"
+          style={{ marginRight: 20 }}
+        >
+          Create Room
+        </Button>
       </Container>
 
       <Modal
         title="Add Friend"
-        visible={open}
-        onCancel={handleCancelCreateChat}
+        visible={openFriend}
+        onCancel={closeAddFriendModal}
         footer={[
           <Button key="submit" type="primary" onClick={handleClickAddFriend}>
             Add
-          </Button>
+          </Button>,
         ]}
       >
-        <Input
-          placeholder="Enter username"
-          value={username}
-          onChange={handleChangeUsername}
-        />
+        <Input ref={usernameRef} placeholder="Enter username" />
+      </Modal>
+
+      <Modal
+        title="Create Room"
+        visible={openRoom}
+        onCancel={closeCreateRoomModal}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleClickCreateRoom}>
+            Create
+          </Button>,
+        ]}
+      >
+        <Text>Room name</Text>
+        <Input ref={roomRef} placeholder="Enter name" />
+
+        <Text>Friends</Text>
+        <Select
+          mode="tags"
+          size="default"
+          placeholder="Please select"
+          value={usernames}
+          defaultValue={[]}
+          onChange={handleChangeSelect}
+          style={{ width: "100%" }}
+        >
+          {recipients.map((f) => (
+            <Option userId={f.id} key={f.username}>
+              {f.username}
+            </Option>
+          ))}
+        </Select>
       </Modal>
     </>
   );

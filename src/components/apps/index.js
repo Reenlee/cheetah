@@ -1,13 +1,9 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { Suspense, lazy } from "react";
 import { message } from "antd";
 import axios from "axios";
-import LoginPage from "../pages/LoginPage";
-import SignupPage from "../pages/SignupPage";
-import ChatPage from "../pages/ChatPage";
 import { useAuth } from "../contexts/auth";
 
-axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.baseURL = process.env.REACT_APP_API_ENDPOINT;
 
 axios.interceptors.response.use(
   ({ data }) => data,
@@ -22,23 +18,25 @@ axios.interceptors.response.use(
   }
 );
 
+const Authenticated = lazy(() => import("./Authenticated"));
+const Unauthenticated = lazy(() => import("./Unauthenticated"));
+
 function App() {
   const { auth } = useAuth();
   console.log(auth);
 
   if (auth.userId) {
     return (
-      <Switch>
-        <Route exact path="/" component={ChatPage} />
-      </Switch>
+      <Suspense fallback={<div>LOADING...</div>}>
+        <Authenticated />
+      </Suspense>
     );
   }
 
   return (
-    <Switch>
-      <Route exact path="/" component={LoginPage} />
-      <Route exact path="/signup" component={SignupPage} />
-    </Switch>
+    <Suspense fallback={<div>LOADING...</div>}>
+      <Unauthenticated />
+    </Suspense>
   );
 }
 

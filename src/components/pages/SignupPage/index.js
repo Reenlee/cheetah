@@ -1,34 +1,21 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Input } from "antd";
-import { postRequest } from "../../helpers/api";
+import { useAuth } from "../../contexts/auth";
 
 const SignupPage = () => {
   const history = useHistory();
+  const { signup } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleChangeUN = e => {
-    setUsername(e.target.value);
-  };
+  const handleChangeUN = (e) => setUsername(e.target.value);
 
-  const handleChangePW = e => {
-    setPassword(e.target.value);
-  };
+  const handleChangePW = (e) => setPassword(e.target.value);
 
-  const handleClickSignup = () => {
-    const userInfo = { username, password };
+  const handleClickSignup = () => signup({ username, password });
 
-    postRequest("/signup", userInfo).then(data => {
-      const token = data.token;
-      localStorage.setItem("token", token);
-      history.push("/chat");
-    });
-  };
-
-  const handleClickLogin = () => {
-    history.push("/");
-  };
+  const handleClickLogin = () => history.push("/");
 
   return (
     <div style={{ display: "grid", minHeight: "100vh" }}>
@@ -40,7 +27,7 @@ const SignupPage = () => {
               fontSize: 40,
               color: "white",
               textShadow:
-                "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
+                "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000",
             }}
           >
             ABC
@@ -51,7 +38,7 @@ const SignupPage = () => {
           style={{
             border: "3px solid #940575",
             padding: 20,
-            borderRadius: 5
+            borderRadius: 5,
           }}
         >
           <div style={{ display: "grid" }}>

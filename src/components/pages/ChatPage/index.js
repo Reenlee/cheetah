@@ -1,16 +1,27 @@
 import React from "react";
 import styled from "styled-components";
+import { Avatar, Button } from "antd";
+import { LogoutOutlined, DownloadOutlined } from "@ant-design/icons";
+
 import AccountInfo from "./AccountInfo";
-import PartChatroom from "./PartChatroom";
 import Chatroom from "./Chatroom";
 import FriendList from "./FriendList";
+import PartChatroom from "./PartChatroom";
+import ChatProvider from "../../contexts/chat";
+import { useAuth } from "../../contexts/auth";
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
 
 const ChatContainer = styled.div`
   display: grid;
   grid-gap: 10px;
   grid-template-rows: repeat(9, 1fr);
   grid-template-columns: 3fr 10fr 3fr;
-  height: 100%;
+  flex: 1;
 `;
 
 const Container = styled.div`
@@ -18,53 +29,72 @@ const Container = styled.div`
   position: relative;
 `;
 
-const AccountInfoWrapper = styled(Container)`
+const TopPanel = styled(Container)`
   grid-row: 1/3;
   grid-column: 1/3;
   display: flex;
 `;
 
-const PartChatroomWrapper = styled(Container)`
+const LeftSidePanel = styled(Container)`
   grid-row: 3/10;
   grid-column: 1/2;
 `;
 
-const OpenChatroom = styled(Container)`
+const TopRightPanel = styled(Container)`
   grid-row: 1/6;
   grid-column: 3/4;
 `;
 
-const Friends = styled(Container)`
+const BottomRightPanel = styled(Container)`
   grid-row: 6/10;
   grid-column: 3/4;
 `;
 
-const ChatroomWrapper = styled(Container)`
+const MiddlePanel = styled(Container)`
   grid-row: 3/10;
   grid-column: 2/3;
 `;
 
 const ChatPage = () => {
+  const { logout } = useAuth();
+
+  const handleClickLogout = () => logout();
+
   return (
-    <ChatContainer>
-      <AccountInfoWrapper>
-        <AccountInfo />
-      </AccountInfoWrapper>
+    <ChatProvider>
+      <PageContainer>
+        <div style={{ display: "flex", padding: 10 }}>
+          <Avatar src="https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg" />
 
-      <PartChatroomWrapper>
-        <PartChatroom />
-      </PartChatroomWrapper>
+          <Button
+            onClick={handleClickLogout}
+            type="primary"
+            shape="circle"
+            icon="logout"
+          />
+        </div>
 
-      <OpenChatroom>
-        <FriendList />
-      </OpenChatroom>
+        <ChatContainer>
+          <TopPanel>
+            <AccountInfo />
+          </TopPanel>
 
-      <Friends></Friends>
+          <LeftSidePanel>
+            <FriendList />
+          </LeftSidePanel>
 
-      <ChatroomWrapper>
-        <Chatroom />
-      </ChatroomWrapper>
-    </ChatContainer>
+          <TopRightPanel>
+            <PartChatroom />
+          </TopRightPanel>
+
+          <BottomRightPanel></BottomRightPanel>
+
+          <MiddlePanel>
+            <Chatroom />
+          </MiddlePanel>
+        </ChatContainer>
+      </PageContainer>
+    </ChatProvider>
   );
 };
 

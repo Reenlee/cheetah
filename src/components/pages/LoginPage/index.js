@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Input } from "antd";
-import { postRequest } from "../../helpers/api";
+import { useAuth } from "../../contexts/auth";
 
 const LoginPage = () => {
   const history = useHistory();
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,15 +17,7 @@ const LoginPage = () => {
     setPassword(e.target.value);
   };
 
-  const handleClickLogin = () => {
-    const userInfo = { username, password };
-
-    postRequest("/login", userInfo).then(data => {
-      const token = data.token;
-      localStorage.setItem("token", token);
-      history.push("/chat");
-    });
-  };
+  const handleClickLogin = () => login({ username, password });
 
   const handleClickSignup = () => {
     history.push("/signup");
