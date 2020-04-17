@@ -5,16 +5,12 @@ import { FormOutlined } from "@ant-design/icons";
 
 import { useChat } from "../../contexts/chat";
 
+import { StyledContainer } from "./design";
+
 const { Search, TextArea } = Input;
 const { Title, Text } = Typography;
 
-const Container = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 10px;
+const Container = styled(StyledContainer)`
   overflow: auto;
 `;
 
@@ -48,7 +44,13 @@ const TextAreaWrapper = styled(TextArea)`
 `;
 
 const FriendList = () => {
-  const { recipients, selectRecipient, sendMessage, listChats } = useChat();
+  const {
+    recipient,
+    recipients,
+    selectRecipient,
+    sendMessage,
+    listChats,
+  } = useChat();
   const [visible, setVisible] = useState(false);
   const [filteredFriends, setFilteredFriends] = useState([]);
   const inputRef = useRef(null);
@@ -91,7 +93,13 @@ const FriendList = () => {
 
         <FriendItemListWrapper>
           {filteredFriends.map((f) => (
-            <FriendItemList key={f.id} onClick={() => handleClickRecipient(f)}>
+            <FriendItemList
+              key={f.id}
+              onClick={() => handleClickRecipient(f)}
+              style={{
+                backgroundColor: recipient.id === f.id ? "red" : "",
+              }}
+            >
               <Avatar>{f.username[0]}</Avatar>
               <FriendItem>{f.username}</FriendItem>
               <IconWrapper onClick={handleClickForm} />

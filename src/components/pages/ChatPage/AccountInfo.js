@@ -5,10 +5,12 @@ import { Typography, Button, Modal, Input, Select } from "antd";
 import { useChat } from "../../contexts/chat";
 import { useAuth } from "../../contexts/auth";
 
+import { StyledContainer } from "./design";
+
 const { Text } = Typography;
 const { Option } = Select;
 
-const Container = styled.div`
+const Container = styled(StyledContainer)`
   position: absolute;
   top: 0;
   right: 0;

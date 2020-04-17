@@ -1,16 +1,13 @@
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Input, Button } from "antd";
+
 import { useChat } from "../../contexts/chat";
 import { useAuth } from "../../contexts/auth";
 
-const Container = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 10px;
+import { StyledContainer } from "./design";
+
+const Container = styled(StyledContainer)`
   display: flex;
   flex-direction: column;
 `;
@@ -54,7 +51,7 @@ const Chatroom = () => {
     sendMessage(text);
   };
 
-  const handleKeyDown = e => {
+  const handleKeyDown = (e) => {
     switch (e.key) {
       case "Enter":
         handleClickSend();
@@ -75,7 +72,7 @@ const Chatroom = () => {
             padding: 10,
             backgroundColor: "green",
             borderRadius: 3,
-            margin: 5
+            margin: 5,
           }}
         >
           {message}
@@ -93,7 +90,7 @@ const Chatroom = () => {
             padding: 10,
             backgroundColor: "yellow",
             borderRadius: 3,
-            margin: 5
+            margin: 5,
           }}
         >
           {message}
@@ -102,7 +99,7 @@ const Chatroom = () => {
     );
   };
 
-  const renderMessage = message => {
+  const renderMessage = (message) => {
     if (message.senderId === auth.userId) {
       return renderSender(message);
     } else {
@@ -119,7 +116,7 @@ const Chatroom = () => {
       <div>{recipient.username}</div>
       <MessagesContainer>
         <MessagesWrapper id="messages">
-          {messages.map(m => renderMessage(m))}
+          {messages.map((m) => renderMessage(m))}
         </MessagesWrapper>
       </MessagesContainer>
       <ChatActionsWrapper>

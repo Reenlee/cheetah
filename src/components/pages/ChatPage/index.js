@@ -7,6 +7,8 @@ import AccountInfo from "./AccountInfo";
 import Chatroom from "./Chatroom";
 import FriendList from "./FriendList";
 import PartChatroom from "./PartChatroom";
+import ParticipantList from "./ParticipantList";
+
 import ChatProvider from "../../contexts/chat";
 import { useAuth } from "../../contexts/auth";
 
@@ -20,7 +22,7 @@ const ChatContainer = styled.div`
   display: grid;
   grid-gap: 10px;
   grid-template-rows: repeat(9, 1fr);
-  grid-template-columns: 3fr 10fr 3fr;
+  grid-template-columns: 300px 1fr 300px;
   flex: 1;
 `;
 
@@ -87,7 +89,9 @@ const ChatPage = () => {
             <PartChatroom />
           </TopRightPanel>
 
-          <BottomRightPanel></BottomRightPanel>
+          <BottomRightPanel>
+            <ParticipantList />
+          </BottomRightPanel>
 
           <MiddlePanel>
             <Chatroom />

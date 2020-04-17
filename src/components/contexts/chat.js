@@ -33,7 +33,9 @@ const ChatProvider = (props) => {
 
   const selectRoom = (r) => {
     setRecipient({});
-    setRoom(r);
+    postRequest("/rooms/find", { roomId: r.id }).then((data) => {
+      setRoom(data);
+    });
   };
 
   const listFriends = () =>
