@@ -13,32 +13,33 @@ import ChatProvider from "../../contexts/chat";
 import { useAuth } from "../../contexts/auth";
 
 const PageContainer = styled.div`
+  background-color: black;
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding: 5px;
 `;
 
 const ChatContainer = styled.div`
   display: grid;
-  grid-gap: 10px;
   grid-template-rows: repeat(9, 1fr);
   grid-template-columns: 300px 1fr 300px;
   flex: 1;
+  grid-gap: 5px;
 `;
 
 const Container = styled.div`
-  border: 1px solid black;
   position: relative;
 `;
 
 const TopPanel = styled(Container)`
   grid-row: 1/3;
-  grid-column: 1/3;
+  grid-column: 2/3;
   display: flex;
 `;
 
 const LeftSidePanel = styled(Container)`
-  grid-row: 3/10;
+  grid-row: 1/10;
   grid-column: 1/2;
 `;
 

@@ -13,6 +13,7 @@ const { Text, Title } = Typography;
 
 const Container = styled(StyledContainer)`
   overflow: auto;
+  background-color: rgb(200, 200, 200);
 `;
 
 const RoomListWrapper = styled.div`

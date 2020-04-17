@@ -12,17 +12,20 @@ const { Title, Text } = Typography;
 
 const Container = styled(StyledContainer)`
   overflow: auto;
+  background-color: rgb(200, 200, 200);
 `;
 
 const FriendItemListWrapper = styled.div`
   padding-top: 5px;
 `;
 
-const FriendItemList = styled.div`
+const FriendListItem = styled.div`
   display: flex;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 10px;
+  border-left: 5px solid white;
+  box-sizing: border-box;
 `;
 
 const FriendItem = styled(Text)`
@@ -93,17 +96,17 @@ const FriendList = () => {
 
         <FriendItemListWrapper>
           {filteredFriends.map((f) => (
-            <FriendItemList
+            <FriendListItem
               key={f.id}
               onClick={() => handleClickRecipient(f)}
               style={{
-                backgroundColor: recipient.id === f.id ? "red" : "",
+                backgroundColor: recipient.id === f.id ? "yellow" : "",
               }}
             >
               <Avatar>{f.username[0]}</Avatar>
               <FriendItem>{f.username}</FriendItem>
               <IconWrapper onClick={handleClickForm} />
-            </FriendItemList>
+            </FriendListItem>
           ))}
         </FriendItemListWrapper>
       </Container>

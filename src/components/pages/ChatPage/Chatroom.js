@@ -10,10 +10,11 @@ import { StyledContainer } from "./design";
 const Container = styled(StyledContainer)`
   display: flex;
   flex-direction: column;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
 `;
 
 const MessagesContainer = styled.div`
-  border: 1px solid grey;
   padding: 10px;
   flex: 1;
   position: relative;
@@ -30,14 +31,13 @@ const MessagesWrapper = styled.div`
 `;
 
 const ChatActionsWrapper = styled.div`
-  border: 1px solid grey;
   padding: 10px;
   display: flex;
 `;
 
 const Chatroom = () => {
   const { auth } = useAuth();
-  const { messages, sendMessage, recipient } = useChat();
+  const { messages, sendMessage, recipient, recipients, room } = useChat();
   const inputRef = useRef(null);
 
   const scrollBottom = () => {
@@ -63,9 +63,14 @@ const Chatroom = () => {
     }
   };
 
-  const renderRecipient = ({ id, message }) => {
+  const renderRecipient = ({ id, message, senderId }) => {
+    const sender =
+      (room && room.users && room.users.find((r) => r.id === senderId)) ||
+      recipients.find((r) => r.id === senderId);
+
     return (
       <div key={id}>
+        <div>{sender && sender.username}</div>
         <div
           style={{
             display: "inline-block",
