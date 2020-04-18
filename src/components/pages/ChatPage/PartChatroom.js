@@ -72,10 +72,11 @@ const PartChatroom = () => {
           <RoomListItem
             key={r.id}
             onClick={() => handleClickRoom(r)}
-            style={{ borderLeftColor: room.id === r.id ? "yellow" : "" }}
+            style={{ borderLeftColor: room.id === r.id ? "blue" : "" }}
           >
             <Avatar>{r.name[0]}</Avatar>
             <RoomItem>{r.name}</RoomItem>
+            <div>{r.unread}</div>
           </RoomListItem>
         ))}
       </RoomListWrapper>

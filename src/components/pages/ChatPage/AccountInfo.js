@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import { Typography, Button, Modal, Input, Select } from "antd";
+import { Typography, Button, Modal, Input, Select, Badge } from "antd";
 
 import { useChat } from "../../contexts/chat";
 import { useAuth } from "../../contexts/auth";
@@ -16,7 +16,7 @@ const Container = styled(StyledContainer)`
 
 const AccountInfo = () => {
   const { auth } = useAuth();
-  const { addFriend, addRoom, recipients } = useChat();
+  const { addFriend, addRoom, recipients, sendInvitation } = useChat();
   const [openFriend, setOpenFriend] = useState(false);
   const [openRoom, setOpenRoom] = useState(false);
   // track usernames when user creates a new room
@@ -44,9 +44,11 @@ const AccountInfo = () => {
   const handleClickAddFriend = () => {
     const username = usernameRef.current.state.value;
     usernameRef.current.setValue("");
-    addFriend(username).then(() => {
-      setOpenFriend(false);
-    });
+    sendInvitation(username);
+
+    // addFriend(username).then(() => {
+    //   setOpenFriend(false);
+    // });
   };
 
   const handleClickCreateRoom = () => {
@@ -71,20 +73,18 @@ const AccountInfo = () => {
         <div>
           <Text>{`Friends: ${recipients.length}`}</Text>
         </div>
-        <Button
-          onClick={openAddFriendModal}
-          type="primary"
-          icon="plus"
-          style={{ marginRight: 20 }}
-        >
-          Add Friend
-        </Button>
+
+        <Badge count={5}>
+          <Button onClick={openAddFriendModal} type="primary" icon="plus">
+            Add Friend
+          </Button>
+        </Badge>
 
         <Button
           onClick={openCreateRoomModal}
           type="primary"
           icon="plus"
-          style={{ marginRight: 20 }}
+          style={{ marginLeft: 20 }}
         >
           Create Room
         </Button>
@@ -101,6 +101,14 @@ const AccountInfo = () => {
         ]}
       >
         <Input ref={usernameRef} placeholder="Enter username" />
+        <div>
+          <div>New friend request</div>
+          <div style={{ display: "flex" }}>
+            <div>johnkim</div>
+            <button>accept</button>
+            <button>reject</button>
+          </div>
+        </div>
       </Modal>
 
       <Modal

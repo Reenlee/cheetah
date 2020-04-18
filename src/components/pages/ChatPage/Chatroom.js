@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
-import { Input, Button } from "antd";
+import { Input, Button, Avatar } from "antd";
+import moment from "moment";
 
 import { useChat } from "../../contexts/chat";
 import { useAuth } from "../../contexts/auth";
@@ -63,42 +64,49 @@ const Chatroom = () => {
     }
   };
 
-  const renderRecipient = ({ id, message, senderId }) => {
+  const renderRecipient = ({ id, message, senderId, createdOn }) => {
     const sender =
       (room && room.users && room.users.find((r) => r.id === senderId)) ||
       recipients.find((r) => r.id === senderId);
 
+    const today = moment(new Date().getTime());
+    const messageDate = moment(createdOn);
+    const format =
+      today.diff(messageDate, "days") === 0 ? "MMMM Do, h:mm a" : "L";
+
     return (
-      <div key={id}>
-        <div>{sender && sender.username}</div>
-        <div
-          style={{
-            display: "inline-block",
-            padding: 10,
-            backgroundColor: "green",
-            borderRadius: 3,
-            margin: 5,
-          }}
-        >
-          {message}
+      <div key={id} style={{ display: "flex", marginTop: 10 }}>
+        <Avatar>{sender.username[0]}</Avatar>
+        <div style={{ marginLeft: 10 }}>
+          <div style={{ display: "flex" }}>
+            <div>{sender && sender.username}</div>
+            <div style={{ marginLeft: 5 }}>
+              {createdOn && moment(createdOn).format(format)}
+            </div>
+          </div>
+          <div>{message}</div>
         </div>
       </div>
     );
   };
 
-  const renderSender = ({ _id, id, message }) => {
+  const renderSender = ({ _id, id, message, createdOn }) => {
+    const today = moment(new Date().getTime());
+    const messageDate = moment(createdOn);
+    const format =
+      today.diff(messageDate, "days") === 0 ? "MMMM Do, h:mm a" : "L";
+
     return (
-      <div key={id} style={{ textAlign: "right" }}>
-        <div
-          style={{
-            display: "inline-block",
-            padding: 10,
-            backgroundColor: "yellow",
-            borderRadius: 3,
-            margin: 5,
-          }}
-        >
-          {message}
+      <div key={id} style={{ display: "flex", marginTop: 10 }}>
+        <Avatar>{auth.username[0]}</Avatar>
+        <div style={{ marginLeft: 10 }}>
+          <div style={{ display: "flex" }}>
+            <div>{auth && auth.username}</div>
+            <div style={{ marginLeft: 5 }}>
+              {createdOn && moment(createdOn).format(format)}
+            </div>
+          </div>
+          <div>{message}</div>
         </div>
       </div>
     );

@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Avatar, Button, Input, Typography, Modal } from "antd";
-import { FormOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
 import { useChat } from "../../contexts/chat";
 
 import { StyledContainer } from "./design";
+import { useAuth } from "../../contexts/auth";
 
 const { Search, TextArea } = Input;
 const { Title, Text } = Typography;
@@ -33,7 +34,7 @@ const FriendItem = styled(Text)`
   flex: 1;
 `;
 
-const IconWrapper = styled(FormOutlined)`
+const IconWrapper = styled(PlusCircleOutlined)`
   line-height: 0;
   margin: auto;
   :hover {
@@ -41,7 +42,12 @@ const IconWrapper = styled(FormOutlined)`
 `;
 
 const ParticipantList = () => {
-  const { room } = useChat();
+  const { room, recipients, addFriend } = useChat();
+  const { auth } = useAuth();
+
+  const handleClickPlus = ({ username }) => {
+    addFriend(username);
+  };
 
   return (
     <Container>
@@ -55,7 +61,11 @@ const ParticipantList = () => {
             <FriendItemList key={f.id}>
               <Avatar>{f.username[0]}</Avatar>
               <FriendItem>{f.username}</FriendItem>
-              <IconWrapper />
+
+              {recipients.find((r) => r.id === f.id) ||
+              auth.userId === f.id ? null : (
+                <IconWrapper onClick={() => handleClickPlus(f)} />
+              )}
             </FriendItemList>
           ))}
       </FriendItemListWrapper>

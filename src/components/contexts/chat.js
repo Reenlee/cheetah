@@ -29,6 +29,15 @@ const ChatProvider = (props) => {
   const selectRecipient = (r) => {
     setRecipient(r);
     setRoom({});
+
+    const temp = recipients.map((f) => {
+      if (f.id === r.id) {
+        delete f.unread;
+      }
+      return f;
+    });
+
+    setRecipients(temp);
   };
 
   const selectRoom = (r) => {
@@ -36,6 +45,15 @@ const ChatProvider = (props) => {
     postRequest("/rooms/find", { roomId: r.id }).then((data) => {
       setRoom(data);
     });
+
+    const temp = rooms.map((f) => {
+      if (f.id === r.id) {
+        delete f.unread;
+      }
+      return f;
+    });
+
+    setRooms(temp);
   };
 
   const listFriends = () =>
@@ -65,17 +83,13 @@ const ChatProvider = (props) => {
   };
 
   const sendMessage = (message) => {
-    console.log({
-      auth_token: `Bearer ${localStorage.getItem("token")}`,
-      senderId: auth.userId,
-      recipientId: recipient.id ? recipient.id : null,
-      roomId: room.id ? room.id : null,
-      type: "send",
-      message,
-    });
-
     setMessages(
-      messages.concat({ id: uuid.v4(), senderId: auth.userId, message })
+      messages.concat({
+        id: uuid.v4(),
+        senderId: auth.userId,
+        message,
+        createdOn: new Date().getTime(),
+      })
     );
 
     chatRef.current.send(
@@ -88,6 +102,23 @@ const ChatProvider = (props) => {
           roomId: room.id ? room.id : null,
           type: "send",
           message,
+        },
+      })
+    );
+  };
+
+  const sendInvitation = (username) => {
+    chatRef.current.send(
+      JSON.stringify({
+        action: "default",
+        data: {
+          auth_token: `Bearer ${localStorage.getItem("token")}`,
+          sender: {
+            id: auth.userId,
+            username: auth.username,
+          },
+          type: "invite",
+          username,
         },
       })
     );
@@ -116,9 +147,35 @@ const ChatProvider = (props) => {
         (recipient.id === senderId || room.id === roomId)
       ) {
         setMessages(messages.concat(payload));
+      } else {
+        if (recipientId) {
+          const temp = recipients.map((r) => {
+            if (r.id === senderId) {
+              r.unread = typeof r.unread === "number" ? r.unread + 1 : 1;
+              return r;
+            }
+            return r;
+          });
+          setRecipients(temp);
+        }
+
+        if (roomId) {
+          const temp = rooms.map((r) => {
+            if (r.id === roomId) {
+              r.unread = typeof r.unread === "number" ? r.unread + 1 : 1;
+              return r;
+            }
+            return r;
+          });
+          setRooms(temp);
+        }
+      }
+
+      if (payload.type === "invite") {
+        alert(`you got friend request from... ${payload.sender.username}`);
       }
     };
-  }, [auth.userId, messages, recipient, room]);
+  }, [auth.userId, messages, recipient, recipients, room, rooms]);
 
   useEffect(() => {
     listFriends();
@@ -140,6 +197,7 @@ const ChatProvider = (props) => {
         listChats,
         listRooms,
         sendMessage,
+        sendInvitation,
       }}
       {...props}
     />
