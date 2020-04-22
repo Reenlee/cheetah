@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
-import { Input, Button, Avatar } from "antd";
+import { Input, Button, Avatar, Typography } from "antd";
 import moment from "moment";
 
 import { useChat } from "../../contexts/chat";
@@ -35,6 +35,8 @@ const ChatActionsWrapper = styled.div`
   padding: 10px;
   display: flex;
 `;
+
+const { Text } = Typography;
 
 const Chatroom = () => {
   const { auth } = useAuth();
@@ -72,17 +74,17 @@ const Chatroom = () => {
     const today = moment(new Date().getTime());
     const messageDate = moment(createdOn);
     const format =
-      today.diff(messageDate, "days") === 0 ? "MMMM Do, h:mm a" : "L";
+      today.diff(messageDate, "days") === 0 ? "[today], h:mm a" : "L";
 
     return (
       <div key={id} style={{ display: "flex", marginTop: 10 }}>
         <Avatar>{sender.username[0]}</Avatar>
         <div style={{ marginLeft: 10 }}>
           <div style={{ display: "flex" }}>
-            <div>{sender && sender.username}</div>
-            <div style={{ marginLeft: 5 }}>
+            <Text strong>{sender && sender.username}</Text>
+            <Text style={{ marginLeft: 5, fontSize: 12, lineHeight: "21px" }}>
               {createdOn && moment(createdOn).format(format)}
-            </div>
+            </Text>
           </div>
           <div>{message}</div>
         </div>
@@ -94,17 +96,17 @@ const Chatroom = () => {
     const today = moment(new Date().getTime());
     const messageDate = moment(createdOn);
     const format =
-      today.diff(messageDate, "days") === 0 ? "MMMM Do, h:mm a" : "L";
+      today.diff(messageDate, "days") === 0 ? "[today], h:mm a" : "L";
 
     return (
       <div key={id} style={{ display: "flex", marginTop: 10 }}>
         <Avatar>{auth.username[0]}</Avatar>
         <div style={{ marginLeft: 10 }}>
           <div style={{ display: "flex" }}>
-            <div>{auth && auth.username}</div>
-            <div style={{ marginLeft: 5 }}>
+            <Text strong>{auth && auth.username}</Text>
+            <Text style={{ marginLeft: 5, fontSize: 12, lineHeight: "21px" }}>
               {createdOn && moment(createdOn).format(format)}
-            </div>
+            </Text>
           </div>
           <div>{message}</div>
         </div>

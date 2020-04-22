@@ -23,7 +23,6 @@ const Unauthenticated = lazy(() => import("./Unauthenticated"));
 
 function App() {
   const { auth } = useAuth();
-  console.log(auth);
 
   if (auth.userId) {
     return (

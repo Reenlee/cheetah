@@ -7,9 +7,11 @@ import React, {
 } from "react";
 import { Modal } from "antd";
 import uuid from "uuid";
+import { message } from "antd";
 
 import { useAuth } from "./auth";
 import { postRequest } from "../helpers/api";
+import { findFriend } from "../pages/ChatPage/api";
 
 const { confirm, warning, info } = Modal;
 
@@ -18,6 +20,7 @@ const useChat = () => useContext(ChatContext);
 
 const ChatProvider = (props) => {
   const { auth } = useAuth();
+  const [invites, setInvites] = useState([]);
   const [recipient, setRecipient] = useState("");
   const [recipients, setRecipients] = useState([]);
   const [room, setRoom] = useState({});
@@ -56,6 +59,11 @@ const ChatProvider = (props) => {
     setRooms(temp);
   };
 
+  const listInvites = (username) =>
+    postRequest("/accounts/invite").then((data) => {
+      setInvites(data);
+    });
+
   const listFriends = () =>
     postRequest("/friends/list").then((data) => {
       setRecipients(data);
@@ -64,6 +72,7 @@ const ChatProvider = (props) => {
   const addFriend = (username) =>
     postRequest("/friends/add", { username }).then((data) => {
       setRecipients(recipients.concat(data));
+      setInvites(invites.filter((i) => i.username !== data.username));
     });
 
   const listRooms = () =>
@@ -107,7 +116,25 @@ const ChatProvider = (props) => {
     );
   };
 
-  const sendInvitation = (username) => {
+  const sendInvite = async (username) => {
+    const foundFriend = recipients.find((r) => r.username === username);
+    if (foundFriend) {
+      message.error("The user is already your friend");
+      return;
+    }
+
+    const foundRecord = await findFriend(username);
+    if (!foundRecord) {
+      message.error("The user does not exist");
+      return;
+    }
+
+    const foundMyself = username === auth.username;
+    if (foundMyself) {
+      message.error("You cannot add yourself");
+      return;
+    }
+
     chatRef.current.send(
       JSON.stringify({
         action: "default",
@@ -172,14 +199,15 @@ const ChatProvider = (props) => {
       }
 
       if (payload.type === "invite") {
-        alert(`you got friend request from... ${payload.sender.username}`);
+        setInvites(invites.concat(payload));
       }
     };
-  }, [auth.userId, messages, recipient, recipients, room, rooms]);
+  }, [auth.userId, invites, messages, recipient, recipients, room, rooms]);
 
   useEffect(() => {
     listFriends();
     listRooms();
+    listInvites();
   }, []);
 
   return (
@@ -187,6 +215,7 @@ const ChatProvider = (props) => {
       value={{
         room,
         rooms,
+        invites,
         messages,
         recipient,
         recipients,
@@ -197,7 +226,7 @@ const ChatProvider = (props) => {
         listChats,
         listRooms,
         sendMessage,
-        sendInvitation,
+        sendInvite,
       }}
       {...props}
     />

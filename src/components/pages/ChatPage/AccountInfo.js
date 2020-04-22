@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Typography, Button, Modal, Input, Select, Badge } from "antd";
 
@@ -16,7 +16,7 @@ const Container = styled(StyledContainer)`
 
 const AccountInfo = () => {
   const { auth } = useAuth();
-  const { addFriend, addRoom, recipients, sendInvitation } = useChat();
+  const { addFriend, addRoom, recipients, sendInvite, invites } = useChat();
   const [openFriend, setOpenFriend] = useState(false);
   const [openRoom, setOpenRoom] = useState(false);
   // track usernames when user creates a new room
@@ -44,11 +44,8 @@ const AccountInfo = () => {
   const handleClickAddFriend = () => {
     const username = usernameRef.current.state.value;
     usernameRef.current.setValue("");
-    sendInvitation(username);
-
-    // addFriend(username).then(() => {
-    //   setOpenFriend(false);
-    // });
+    sendInvite(username);
+    closeAddFriendModal();
   };
 
   const handleClickCreateRoom = () => {
@@ -74,7 +71,7 @@ const AccountInfo = () => {
           <Text>{`Friends: ${recipients.length}`}</Text>
         </div>
 
-        <Badge count={5}>
+        <Badge count={invites.length}>
           <Button onClick={openAddFriendModal} type="primary" icon="plus">
             Add Friend
           </Button>
@@ -103,11 +100,13 @@ const AccountInfo = () => {
         <Input ref={usernameRef} placeholder="Enter username" />
         <div>
           <div>New friend request</div>
-          <div style={{ display: "flex" }}>
-            <div>johnkim</div>
-            <button>accept</button>
-            <button>reject</button>
-          </div>
+          {invites.map((i) => (
+            <div key={i.username} style={{ display: "flex" }}>
+              <div>{i.username}</div>
+              <Button onClick={() => addFriend(i.username)}>Accept</Button>
+              <Button onClick={() => addFriend(i.username)}>Reject</Button>
+            </div>
+          ))}
         </div>
       </Modal>
 
