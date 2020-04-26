@@ -4,7 +4,7 @@ import { Avatar, Input, Typography } from "antd";
 
 import { useChat } from "../../contexts/chat";
 
-import { StyledContainer } from "./design";
+import { StyledContainer, TitleUnderlined } from "./design";
 
 const { Search } = Input;
 const { Title, Text } = Typography;
@@ -56,7 +56,7 @@ const FriendList = () => {
 
   return (
     <Container>
-      <Title level={4}>My Friends</Title>
+      <TitleUnderlined level={4}>My Friends</TitleUnderlined>
       <Search placeholder="input search text" onChange={handleChange} />
 
       <FriendItemListWrapper>
@@ -64,11 +64,11 @@ const FriendList = () => {
           <FriendListItem
             key={f.id}
             onClick={() => handleClickRecipient(f)}
-            style={{ borderLeftColor: recipient.id === f.id ? "blue" : "" }}
+            style={{ borderLeftColor: recipient.id === f.id ? "#1890ff" : "" }}
           >
             <Avatar>{f.username[0]}</Avatar>
             <FriendItem>{f.username}</FriendItem>
-            <div>{f.unread}</div>
+            <div style={{ color: "red" }}>{f.unread}</div>
           </FriendListItem>
         ))}
       </FriendItemListWrapper>

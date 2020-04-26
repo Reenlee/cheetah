@@ -22,7 +22,7 @@ const PageContainer = styled.div`
 
 const ChatContainer = styled.div`
   display: grid;
-  grid-template-rows: repeat(9, 1fr);
+  grid-template-rows: 150px 1fr 1fr;
   grid-template-columns: 300px 1fr 300px;
   flex: 1;
   grid-gap: 5px;
@@ -33,28 +33,27 @@ const Container = styled.div`
 `;
 
 const TopPanel = styled(Container)`
-  grid-row: 1/3;
-  grid-column: 2/3;
-  display: flex;
+  grid-row: 1/2;
+  grid-column: 1/2;
 `;
 
 const LeftSidePanel = styled(Container)`
-  grid-row: 1/10;
+  grid-row: 2/4;
   grid-column: 1/2;
 `;
 
 const TopRightPanel = styled(Container)`
-  grid-row: 1/6;
+  grid-row: 1/3;
   grid-column: 3/4;
 `;
 
 const BottomRightPanel = styled(Container)`
-  grid-row: 6/10;
+  grid-row: 3/4;
   grid-column: 3/4;
 `;
 
 const MiddlePanel = styled(Container)`
-  grid-row: 3/10;
+  grid-row: 1/4;
   grid-column: 2/3;
 `;
 
@@ -66,16 +65,17 @@ const ChatPage = () => {
   return (
     <ChatProvider>
       <PageContainer>
-        <div style={{ display: "flex", padding: 10 }}>
+        {/* <div style={{ display: "flex", padding: 10 }}>
           <Avatar src="https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg" />
 
           <Button
+            style={{ marginLeft: 10 }}
             onClick={handleClickLogout}
             type="primary"
             shape="circle"
             icon="logout"
           />
-        </div>
+        </div> */}
 
         <ChatContainer>
           <TopPanel>

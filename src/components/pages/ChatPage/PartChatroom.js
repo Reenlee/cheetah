@@ -6,7 +6,7 @@ import { FormOutlined } from "@ant-design/icons";
 
 import { useChat } from "../../contexts/chat";
 
-import { StyledContainer } from "./design";
+import { StyledContainer, TitleUnderlined } from "./design";
 
 const { Search } = Input;
 const { Text, Title } = Typography;
@@ -64,7 +64,7 @@ const PartChatroom = () => {
 
   return (
     <Container>
-      <Title level={4}>Participated Chatrooms</Title>
+      <TitleUnderlined level={4}>Participated Chatrooms</TitleUnderlined>
       <Search placeholder="input search text" onChange={handleChange} />
 
       <RoomListWrapper>
@@ -72,7 +72,7 @@ const PartChatroom = () => {
           <RoomListItem
             key={r.id}
             onClick={() => handleClickRoom(r)}
-            style={{ borderLeftColor: room.id === r.id ? "blue" : "" }}
+            style={{ borderLeftColor: room.id === r.id ? "#1890ff" : "" }}
           >
             <Avatar>{r.name[0]}</Avatar>
             <RoomItem>{r.name}</RoomItem>

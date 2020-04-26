@@ -6,13 +6,14 @@ import moment from "moment";
 import { useChat } from "../../contexts/chat";
 import { useAuth } from "../../contexts/auth";
 
-import { StyledContainer } from "./design";
+import { StyledContainer, TitleUnderlined } from "./design";
+
+const { Text } = Typography;
 
 const Container = styled(StyledContainer)`
   display: flex;
   flex-direction: column;
   background-color: rgb(255, 255, 255);
-  border-radius: 10px;
 `;
 
 const MessagesContainer = styled.div`
@@ -35,8 +36,6 @@ const ChatActionsWrapper = styled.div`
   padding: 10px;
   display: flex;
 `;
-
-const { Text } = Typography;
 
 const Chatroom = () => {
   const { auth } = useAuth();
@@ -128,7 +127,9 @@ const Chatroom = () => {
 
   return (
     <Container>
-      <div>{recipient.username}</div>
+      {recipient.username && (
+        <TitleUnderlined level={4}>{recipient.username}</TitleUnderlined>
+      )}
       <MessagesContainer>
         <MessagesWrapper id="messages">
           {messages.map((m) => renderMessage(m))}

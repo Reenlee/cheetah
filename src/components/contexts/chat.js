@@ -69,21 +69,25 @@ const ChatProvider = (props) => {
       setRecipients(data);
     });
 
-  const addFriend = (username) =>
-    postRequest("/friends/add", { username }).then((data) => {
-      setRecipients(recipients.concat(data));
-      setInvites(invites.filter((i) => i.username !== data.username));
-    });
-
   const listRooms = () =>
     postRequest("/rooms/list").then((data) => {
       setRooms(data);
     });
 
-  const addRoom = (name, userIds) =>
-    postRequest("/rooms/add", { name, userIds }).then((data) => {
-      setRooms(rooms.concat(data));
-    });
+  const addRoom = (name, userIds) => {
+    chatRef.current.send(
+      JSON.stringify({
+        action: "default",
+        data: {
+          auth_token: `Bearer ${localStorage.getItem("token")}`,
+          senderId: auth.userId,
+          name,
+          userIds,
+          type: "add-room",
+        },
+      })
+    );
+  };
 
   const listChats = ({ recipientId, roomId }) => {
     postRequest("/chats/list", { recipientId, roomId }).then((data) => {
@@ -151,6 +155,25 @@ const ChatProvider = (props) => {
     );
   };
 
+  const acceptInvite = async (username) => {
+    chatRef.current.send(
+      JSON.stringify({
+        action: "default",
+        data: {
+          auth_token: `Bearer ${localStorage.getItem("token")}`,
+          type: "accept",
+          username,
+        },
+      })
+    );
+  };
+
+  const rejectInvite = async (username) => {
+    postRequest("/friends/reject", { username }).then((data) => {
+      setInvites(invites.filter((i) => i.username !== data.username));
+    });
+  };
+
   useEffect(() => {
     chatRef.current.onopen = () => {
       chatRef.current.send(
@@ -201,6 +224,16 @@ const ChatProvider = (props) => {
       if (payload.type === "invite") {
         setInvites(invites.concat(payload));
       }
+
+      if (payload.type === "accept") {
+        const friend = payload.friends.find((f) => f.id !== auth.userId);
+        setRecipients(recipients.concat(friend));
+        setInvites(invites.filter((i) => i.username !== friend.username));
+      }
+
+      if (payload.type === "add-room") {
+        setRooms(rooms.concat(payload.room));
+      }
     };
   }, [auth.userId, invites, messages, recipient, recipients, room, rooms]);
 
@@ -222,11 +255,12 @@ const ChatProvider = (props) => {
         selectRoom,
         selectRecipient,
         addRoom,
-        addFriend,
         listChats,
         listRooms,
         sendMessage,
         sendInvite,
+        acceptInvite,
+        rejectInvite,
       }}
       {...props}
     />

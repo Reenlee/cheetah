@@ -5,7 +5,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 
 import { useChat } from "../../contexts/chat";
 
-import { StyledContainer } from "./design";
+import { StyledContainer, TitleUnderlined } from "./design";
 import { useAuth } from "../../contexts/auth";
 
 const { Search, TextArea } = Input;
@@ -51,7 +51,7 @@ const ParticipantList = () => {
 
   return (
     <Container>
-      <Title level={4}>Participant List</Title>
+      <TitleUnderlined level={4}>Participant List</TitleUnderlined>
 
       <div>Room name: {room.name}</div>
 
