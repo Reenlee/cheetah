@@ -194,7 +194,8 @@ const ChatProvider = (props) => {
 
       if (
         payload.type === "send" &&
-        (recipient.id === senderId || room.id === roomId)
+        ((!roomId && recipient.id === senderId) ||
+          (roomId && room.id === roomId))
       ) {
         setMessages(messages.concat(payload));
       } else {
