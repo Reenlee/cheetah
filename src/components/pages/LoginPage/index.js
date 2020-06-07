@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Input } from "antd";
 import { useAuth } from "../../contexts/auth";
+import Test from "../TestPage/index";
 
 const LoginPage = () => {
   const history = useHistory();
@@ -9,11 +10,11 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleChangeUN = e => {
+  const handleChangeUN = (e) => {
     setUsername(e.target.value);
   };
 
-  const handleChangePW = e => {
+  const handleChangePW = (e) => {
     setPassword(e.target.value);
   };
 
@@ -33,18 +34,20 @@ const LoginPage = () => {
               fontSize: 40,
               color: "white",
               textShadow:
-                "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
+                "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000",
             }}
           >
             TEXTOING
           </div>
         </div>
 
+        <Test />
+
         <div
           style={{
             border: "3px solid #940575",
             padding: 20,
-            borderRadius: 5
+            borderRadius: 5,
           }}
         >
           <div style={{ display: "grid" }}>
