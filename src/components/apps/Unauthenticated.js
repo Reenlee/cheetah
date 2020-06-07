@@ -3,6 +3,8 @@ import { Route, Switch } from "react-router-dom";
 
 const LoginPage = lazy(() => import("../pages/LoginPage"));
 const SignupPage = lazy(() => import("../pages/SignupPage"));
+const TestPage = lazy(() => import("../pages/TestPage"));
+const SecondTestPage = lazy(() => import("../pages/SecondTestPage"));
 
 function Unauthenticated() {
   return (
@@ -10,6 +12,8 @@ function Unauthenticated() {
       <Switch>
         <Route exact path="/" component={LoginPage} />
         <Route exact path="/signup" component={SignupPage} />
+        <Route exact path="/test" component={TestPage} />
+        <Route exact path="/second-test" component={SecondTestPage} />
       </Switch>
     </Suspense>
   );
